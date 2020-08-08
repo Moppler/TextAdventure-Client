@@ -1,0 +1,26 @@
+{
+  "name": "@moppler/text-adventure-cli",
+  "version": "1.0.0",
+  "description": "",
+  "main": "cli.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bin": {
+    "text-adventure": "./cli.js"
+  },
+  "devDependencies": {
+    "@types/node": "^14.0.27",
+    "eslint": "^7.6.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "prettier": "^2.0.5"
+  },
+  "dependencies": {
+    "chalk": "^4.1.0",
+    "prompts": "^2.3.2",
+    "ws": "^7.3.1"
+  }
+}
