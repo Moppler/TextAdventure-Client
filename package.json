@@ -2,7 +2,7 @@
   "name": "@moppler/text-adventure-cli",
   "version": "1.0.0",
   "description": "",
-  "main": "cli.js",
+  "main": "src/cli.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -10,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "bin": {
-    "text-adventure": "./cli.js"
+    "text-adventure": "./src/cli.js"
   },
   "devDependencies": {
     "@types/node": "^14.0.27",

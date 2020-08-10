@@ -3,6 +3,8 @@ const chalk = require('chalk');
 const prompts = require('prompts');
 const WebSocket = require('ws');
 
+const requestInstruction = require('./requestInstruction');
+
 const config = {
   webSocketAddress: 'ws://localhost:8080',
 };
@@ -18,7 +20,7 @@ ws.on('open', function open() {
   process.stdout.write(chalk.green('connected'));
   console.log();
 
-  ws.send(JSON.stringify({ request: 'commands' }));
+  // ws.send(JSON.stringify({ request: 'commands' }));
 });
 
 ws.on('error', function error() {
@@ -37,9 +39,8 @@ ws.on('message', async function incoming(data) {
     return;
   }
 
-  if (parsedMessage.type === 'prompt') {
-    const response = await prompts(parsedMessage.data);
-    ws.send(JSON.stringify({ type: 'response', data: response }));
+  if (parsedMessage.type === 'requestInstruction') {
+    await requestInstruction.process(ws, parsedMessage.data);
     return;
   }
 });
