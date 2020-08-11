@@ -6,7 +6,7 @@ const WebSocket = require('ws');
 const requestInstruction = require('./requestInstruction');
 
 const config = {
-  webSocketAddress: 'ws://localhost:8080',
+  webSocketAddress: 'ws://localhost:2230',
 };
 
 // Store current state here
