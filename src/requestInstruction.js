@@ -20,19 +20,33 @@ module.exports = {
     if (instruction.arguments) {
       args = await prompts(
         instruction.arguments.map((arg) => {
-          let type = 'text';
           if (arg.type === 'select') {
-            type = 'autocomplete';
+            return {
+              type: 'autocomplete',
+              name: arg.name,
+              message: arg.playerPrompt,
+              choices: arg.options.map((option) => ({
+                title: option.name,
+                value: option.value,
+              })),
+            };
           }
-          return {
-            type: type,
-            name: arg.name,
-            message: arg.playerPrompt,
-            choices: arg.options.map((option) => ({
-              title: option.name,
-              value: option.value,
-            })),
-          };
+
+          if (arg.type === 'text') {
+            return {
+              type: 'text',
+              name: arg.name,
+              message: arg.playerPrompt,
+            };
+          }
+
+          if (arg.type === 'password') {
+            return {
+              type: 'password',
+              name: arg.name,
+              message: arg.playerPrompt,
+            };
+          }
         })
       );
     }
