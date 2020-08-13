@@ -9,6 +9,9 @@ const config = {
 };
 
 // Store current state here
+const session = {
+  isProcessingInstruction: false,
+};
 
 console.clear();
 process.stdout.write('Establishing connection to server... ');
@@ -48,15 +51,28 @@ async function handleInstruction(message) {
     return;
   }
 
-  if (message.type === 'requestInstruction') {
-    await requestInstruction.process(ws, message.data);
-
+  if (message.type === 'completedInstruction') {
+    session.isProcessingInstruction = false;
     ws.send(
       JSON.stringify({
         type: 'requestAvailableInstructions',
         data: {},
       })
     );
+    return;
+  }
+
+  if (message.type === 'requestInstruction') {
+    await requestInstruction.process(ws, session, message.data);
+
+    if (!session.isProcessingInstruction) {
+      ws.send(
+        JSON.stringify({
+          type: 'requestAvailableInstructions',
+          data: {},
+        })
+      );
+    }
     return;
   }
 }
