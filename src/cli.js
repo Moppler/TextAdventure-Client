@@ -20,7 +20,7 @@ const ws = new WebSocket(config.webSocketAddress);
 
 ws.on('open', function open() {
   process.stdout.write(chalk.green('connected'));
-  console.log();
+  console.clear();
 
   ws.send(
     JSON.stringify({
@@ -39,7 +39,6 @@ ws.on('error', function error() {
 //
 
 ws.on('message', async function incoming(data) {
-  process.stdout.write('\n');
   const parsedMessage = JSON.parse(data.toString());
 
   await handleInstruction(parsedMessage);

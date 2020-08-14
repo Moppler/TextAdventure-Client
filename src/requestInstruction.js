@@ -12,6 +12,8 @@ module.exports = {
       })),
     });
 
+    if (Object.keys(selectedInstruction).length === 0) return;
+
     const instruction = instructions.availableInstructions.find(
       (ins) => ins.instruction === selectedInstruction.instruction
     );
