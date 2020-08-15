@@ -1,78 +1,86 @@
 #!/usr/bin/env node
-const chalk = require('chalk');
-const WebSocket = require('ws');
-
-const requestInstruction = require('./requestInstruction');
+const Game = require('./game');
 
 const config = {
   webSocketAddress: 'ws://localhost:2230', //'ws://ta.moppler.co.uk:2230',
 };
 
-// Store current state here
-const session = {
-  isProcessingInstruction: false,
+const consoleInterface = {
+  clear() {
+    console.clear();
+  },
+  write(message) {
+    process.stdout.write(message);
+  },
 };
 
-console.clear();
-process.stdout.write('Establishing connection to server... ');
+new Game(config, consoleInterface);
 
-const ws = new WebSocket(config.webSocketAddress);
+// // Store current state here
+// const session = {
+//   isProcessingInstruction: false,
+// };
 
-ws.on('open', function open() {
-  process.stdout.write(chalk.green('connected'));
-  console.log();
+// console.clear();
+// process.stdout.write('Establishing connection to server... ');
 
-  ws.send(
-    JSON.stringify({
-      type: 'requestAvailableInstructions',
-      data: {},
-    })
-  );
-  return;
-});
+// const ws = new WebSocket(config.webSocketAddress);
 
-ws.on('error', function error() {
-  process.stdout.write(chalk.red('failed'));
-  console.log();
-});
+// ws.on('open', function open() {
+//   process.stdout.write(chalk.green('connected'));
+//   console.log();
 
-//
+//   ws.send(
+//     JSON.stringify({
+//       type: 'requestAvailableInstructions',
+//       data: {},
+//     })
+//   );
+//   return;
+// });
 
-ws.on('message', async function incoming(data) {
-  process.stdout.write('\n');
-  const parsedMessage = JSON.parse(data.toString());
+// ws.on('error', function error() {
+//   process.stdout.write(chalk.red('failed'));
+//   console.log();
+// });
 
-  await handleInstruction(parsedMessage);
-});
+// //
 
-async function handleInstruction(message) {
-  if (message.type === 'render') {
-    console.log(message.data.message);
-    return;
-  }
+// ws.on('message', async function incoming(data) {
+//   process.stdout.write('\n');
+//   const parsedMessage = JSON.parse(data.toString());
 
-  if (message.type === 'completedInstruction') {
-    session.isProcessingInstruction = false;
-    ws.send(
-      JSON.stringify({
-        type: 'requestAvailableInstructions',
-        data: {},
-      })
-    );
-    return;
-  }
+//   await handleInstruction(parsedMessage);
+// });
 
-  if (message.type === 'requestInstruction') {
-    await requestInstruction.process(ws, session, message.data);
+// async function handleInstruction(message) {
+//   if (message.type === 'render') {
+//     console.log(message.data.message);
+//     return;
+//   }
 
-    if (!session.isProcessingInstruction) {
-      ws.send(
-        JSON.stringify({
-          type: 'requestAvailableInstructions',
-          data: {},
-        })
-      );
-    }
-    return;
-  }
-}
+//   if (message.type === 'completedInstruction') {
+//     session.isProcessingInstruction = false;
+//     ws.send(
+//       JSON.stringify({
+//         type: 'requestAvailableInstructions',
+//         data: {},
+//       })
+//     );
+//     return;
+//   }
+
+//   if (message.type === 'requestInstruction') {
+//     await requestInstruction.process(ws, session, message.data);
+
+//     if (!session.isProcessingInstruction) {
+//       ws.send(
+//         JSON.stringify({
+//           type: 'requestAvailableInstructions',
+//           data: {},
+//         })
+//       );
+//     }
+//     return;
+//   }
+// }

@@ -1,7 +1,7 @@
 const prompts = require('prompts');
 
 module.exports = {
-  async process(ws, session, instructions) {
+  async process(game, instructions) {
     const selectedInstruction = await prompts({
       type: 'autocomplete',
       name: 'instruction',
@@ -51,9 +51,9 @@ module.exports = {
       );
     }
 
-    session.isProcessingInstruction = true;
+    game.isProcessingInstruction = true;
 
-    ws.send(
+    game.ws.send(
       JSON.stringify({
         type: 'issueInstruction',
         data: {
