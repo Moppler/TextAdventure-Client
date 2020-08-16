@@ -2,7 +2,7 @@
  * @typedef {import('./game')} Game
  */
 
-const prompts = require('prompts');
+const prompts = require('prompts/lib/index');
 
 module.exports = {
   /**
