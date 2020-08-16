@@ -1,6 +1,14 @@
+/**
+ * @typedef {import('./game')} Game
+ */
+
 const prompts = require('prompts');
 
 module.exports = {
+  /**
+   * @param {Game} game
+   * @param {*} instructions
+   */
   async process(game, instructions) {
     const selectedInstruction = await prompts({
       type: 'autocomplete',
@@ -10,6 +18,8 @@ module.exports = {
         title: instruction.name,
         value: instruction.instruction,
       })),
+      stdin: game.terminal.in,
+      stdout: game.terminal.out,
     });
 
     const instruction = instructions.availableInstructions.find(

@@ -3,18 +3,11 @@ const WebSocket = require('ws');
 
 const requestInstruction = require('./requestInstruction');
 
-// const requestInstruction = require('./requestInstruction');
-
-// const config = {
-//   webSocketAddress: 'ws://localhost:2230', //'ws://ta.moppler.co.uk:2230',
-// };
-
-// // Store current state here
-// const session = {
-//   isProcessingInstruction: false,
-// };
-
 class Game {
+  /**
+   * @param {*} config
+   * @param {*} terminal
+   */
   constructor(config, terminal) {
     this.config = config;
     this.terminal = terminal;
@@ -22,7 +15,7 @@ class Game {
     this.isProcessingInstruction = false;
 
     this.terminal.clear();
-    this.terminal.write('Establishing connection to server... ');
+    this.terminal.out.write('Establishing connection to server... ');
 
     this.ws = new WebSocket(this.config.webSocketAddress);
 
@@ -32,7 +25,7 @@ class Game {
   }
 
   open() {
-    this.terminal.write(chalk.green('connected'));
+    this.terminal.out.write(chalk.green('connected'));
 
     this.ws.send(
       JSON.stringify({
@@ -44,11 +37,11 @@ class Game {
   }
 
   error() {
-    this.terminal.write(`${chalk.red('failed')}\n`);
+    this.terminal.out.write(`${chalk.red('failed')}\n`);
   }
 
   async message(data) {
-    this.terminal.write('\n');
+    this.terminal.out.write('\n');
     const parsedMessage = JSON.parse(data.toString());
 
     await this.handleInstruction(parsedMessage);
@@ -56,7 +49,7 @@ class Game {
 
   async handleInstruction(message) {
     if (message.type === 'render') {
-      this.terminal.write(`${message.data.message}\n`);
+      this.terminal.out.write(`${message.data.message}\n`);
       return;
     }
 
